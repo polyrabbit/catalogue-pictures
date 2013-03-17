@@ -13,7 +13,6 @@ import distutils.file_util
 
 img_patt = re.compile(r'\.(jpe?g|gif|bmp|png|tif)', re.I)
 
-
 class ImgFile(object):
     def __init__(self, path):
         fd = open(path, 'rb')
@@ -85,9 +84,9 @@ def parse_arg():
     cwd = os.path.dirname(os.path.abspath(__file__))
     parser = optparse.OptionParser()
     parser.add_option('-s', '--src', dest='src_dir', default=cwd, metavar='source', help='directory where the disordered pictures lie in')
-    parser.add_option('-d', '--dst', dest='dst_dir', default=cwd, metavar='destination', help='directory where to put the classified pictures')
+    parser.add_option('-t', '--target', dest='target', default=cwd, metavar='target', help='directory where to put the classified pictures')
     options = parser.parse_args()[0]
-    return options.src_dir, options.dst_dir
+    return options.src_dir, options.target
 
 def main():
     src_dir, dst_dir = parse_arg()
@@ -95,8 +94,12 @@ def main():
     while True: 
     	ans = raw_input('Catalog pictures from %s to %s, continue?[y/n]: ' % (src_dir, dst_dir))
     	if not ans: continue
-    	if ans.lower() == 'y': break
-    	return
+    	if ans.lower() == 'y':
+            break
+        src_dir = raw_input('Source directory: ')
+    	dst_dir = raw_input('Target directory: ')
+        if src_dir and dst_dir:
+            break
 
     is_img = lambda path: os.path.isfile(path) and img_patt.search(path)
     files = [os.path.join(src_dir, f) for f in os.listdir(src_dir)]
