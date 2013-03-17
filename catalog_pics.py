@@ -12,6 +12,7 @@ import optparse
 import distutils.file_util
 
 img_patt = re.compile(r'\.(jpe?g|gif|bmp|png|tif)', re.I)
+copied_cnt = 0
 
 class ImgFile(object):
     def __init__(self, path):
@@ -59,6 +60,8 @@ class Directory(object):
             # copy2(f.path, dst_dir)
             if copied:
                 print 'copied', f.path, 'to', dst_dir
+                global copied_cnt
+                copied_cnt += 1
             else:
                 print dst_name, 'already exists'
 
@@ -112,6 +115,10 @@ def main():
 
     for new_dir in Directory.iter():
         new_dir.sync()
+
+    print '-'*50
+    print 'Total copied:', copied_cnt
+    raw_input()
 
 if __name__ == '__main__':
 	main()
